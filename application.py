@@ -7,12 +7,25 @@ import json
 app = Flask(__name__)
 CORS(app)  # CORS設定を追加
 
+click_count = 0
 
 # Raspberry PiのURLを指定
 RPI_SERVER_URL = "http://10.124.57.76:5001:5001/receive_message"
 
 
 @app.route('/')
+
+@app.route('/click-count', methods=['GET'])
+def get_click_count():
+    global click_count
+    return jsonify({'count': click_count}), 200
+
+@app.route('/increment-click', methods=['POST'])
+def increment_click():
+    global click_count
+    click_count += 1
+    return jsonify({'count': click_count}), 200
+
 
 @app.route('/message', methods=['POST'])
 def process_message():
